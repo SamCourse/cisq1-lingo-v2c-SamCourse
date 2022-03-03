@@ -87,7 +87,7 @@ class FeedbackTest {
     @DisplayName("hint returned is the same length as the word to guess")
     void hintReturnedMatchesAnswerLength(String word, List<Mark> marks) {
         Feedback feedback = Feedback.create(word, marks);
-        List<Character> hint = feedback.giveHint(new ArrayList<>());
+        List<Character> hint = feedback.giveHint(new ArrayList<>(), word);
 
         assertEquals(hint.size(), word.length());
     }
@@ -97,7 +97,7 @@ class FeedbackTest {
     @DisplayName("hint returned matches word to guess")
     void hintReturnedMatchesAnswer(String word, List<Mark> marks) {
         Feedback feedback = Feedback.create(word, marks);
-        List<Character> hint = feedback.giveHint(new ArrayList<>());
+        List<Character> hint = feedback.giveHint(new ArrayList<>(), word);
 
         for (int i = 0; i < hint.size(); i++) {
             char character = hint.get(i);
@@ -113,7 +113,7 @@ class FeedbackTest {
     @DisplayName("hint returned does not hint too much")
     void hintReturnedDoesNotSpoil(String word, List<Mark> marks) {
         Feedback feedback = Feedback.create(word, marks);
-        List<Character> hint = feedback.giveHint(new ArrayList<>());
+        List<Character> hint = feedback.giveHint(new ArrayList<>(), word);
 
         for (int i = 0; i < marks.size(); i++) {
             if (marks.get(i) != Mark.CORRECT) {
@@ -127,7 +127,7 @@ class FeedbackTest {
     @DisplayName("hint returned matches expected hint")
     void hintReturnedIsCorrect(String word, List<Mark> marks, List<Character> expectedHint) {
         Feedback feedback = Feedback.create(word, marks);
-        List<Character> hint = feedback.giveHint(new ArrayList<>());
+        List<Character> hint = feedback.giveHint(new ArrayList<>(), word);
 
         assertEquals(hint, expectedHint);
     }

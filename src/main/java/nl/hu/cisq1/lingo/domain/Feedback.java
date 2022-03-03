@@ -3,6 +3,7 @@ package nl.hu.cisq1.lingo.domain;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import nl.hu.cisq1.lingo.domain.exception.InvalidFeedbackException;
+import nl.hu.cisq1.lingo.domain.exception.InvalidPreviousHintException;
 
 import java.util.*;
 
@@ -37,7 +38,11 @@ public class Feedback {
         return new Feedback(attempt, Collections.nCopies(attempt.length(), Mark.INVALID));
     }
 
-    public List<Character> giveHint(List<Character> previousHint) {
+    public List<Character> giveHint(List<Character> previousHint, String wordToGuess) {
+        if (!previousHint.isEmpty() && previousHint.size() != wordToGuess.length()) {
+            throw new InvalidPreviousHintException();
+        }
+
         List<Character> newHint = new ArrayList<>();
 
         for (int i = 0; i < attempt.length(); i++) {
