@@ -42,7 +42,11 @@ public class Feedback {
 
         List<Character> newHint = new ArrayList<>();
 
-        for (int i = 0; i < attempt.length(); i++) {
+        if (previousHint.isEmpty()) {
+            newHint.add(wordToGuess.charAt(0));
+        }
+
+        for (int i = 1; i < attempt.length(); i++) {
             char letter = attempt.charAt(i);
             if (marks.get(i) == Mark.CORRECT) {
                 newHint.add(letter);
