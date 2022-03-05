@@ -7,12 +7,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Stream;
 
+import static nl.hu.cisq1.lingo.domain.Mark.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FeedbackTest {
@@ -49,7 +47,7 @@ class FeedbackTest {
     @DisplayName("feedback throws exception if guess word length does not match feedback mark amount")
     void feedbackThrowsExceptionForMismatchedLengths() {
         assertThrows(InvalidFeedbackException.class,
-                () -> Feedback.create("woord", Arrays.asList(Mark.INVALID, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT)));
+                () -> Feedback.create("woord", Arrays.asList(INVALID, CORRECT, CORRECT, CORRECT, CORRECT, CORRECT)));
 
     }
 
@@ -60,23 +58,23 @@ class FeedbackTest {
 
         return Stream.of(
                 Arguments.of(guessWord,
-                        Arrays.asList(Mark.CORRECT, Mark.PRESENT, Mark.ABSENT, Mark.CORRECT, Mark.CORRECT),
+                        Arrays.asList(CORRECT, PRESENT, ABSENT, CORRECT, CORRECT),
                         Arrays.asList(guessWord.charAt(0), Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(3), guessWord.charAt(4))),
 
                 Arguments.of(guessWord,
-                        Arrays.asList(Mark.PRESENT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT, Mark.ABSENT),
+                        Arrays.asList(PRESENT, CORRECT, CORRECT, CORRECT, ABSENT),
                         Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), guessWord.charAt(3), Character.MIN_VALUE)),
 
                 Arguments.of(guessWord,
-                        Arrays.asList(Mark.PRESENT, Mark.PRESENT, Mark.ABSENT, Mark.CORRECT, Mark.CORRECT),
+                        Arrays.asList(PRESENT, PRESENT, ABSENT, CORRECT, CORRECT),
                         Arrays.asList(guessWord.charAt(0), Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(3), guessWord.charAt(4))),
 
                 Arguments.of(guessWord,
-                        Arrays.asList(Mark.CORRECT, Mark.CORRECT, Mark.ABSENT, Mark.CORRECT, Mark.PRESENT),
+                        Arrays.asList(CORRECT, CORRECT, ABSENT, CORRECT, PRESENT),
                         Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE)),
 
                 Arguments.of(guessWord,
-                        Arrays.asList(Mark.ABSENT, Mark.PRESENT, Mark.ABSENT, Mark.PRESENT, Mark.ABSENT),
+                        Arrays.asList(ABSENT, PRESENT, ABSENT, PRESENT, ABSENT),
                         Arrays.asList(guessWord.charAt(0), Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE))
         );
     }
@@ -88,7 +86,7 @@ class FeedbackTest {
         Feedback feedback = Feedback.create(word, marks);
         List<Character> hint = feedback.giveHint(new ArrayList<>(), word);
 
-        assertEquals(hint.size(), word.length());
+        assertEquals(word.length(), hint.size());
     }
 
     @ParameterizedTest
@@ -102,7 +100,7 @@ class FeedbackTest {
             char character = hint.get(i);
 
             if (character != Character.MIN_VALUE) {
-                assertEquals(character, word.charAt(i));
+                assertEquals(word.charAt(i), character);
             }
         }
     }
@@ -115,8 +113,8 @@ class FeedbackTest {
         List<Character> hint = feedback.giveHint(new ArrayList<>(), word);
 
         for (int i = 1; i < marks.size(); i++) {
-            if (marks.get(i) != Mark.CORRECT) {
-                assertEquals(hint.get(i), Character.MIN_VALUE);
+            if (marks.get(i) != CORRECT) {
+                assertEquals(Character.MIN_VALUE, hint.get(i));
             }
         }
     }
@@ -128,7 +126,7 @@ class FeedbackTest {
         Feedback feedback = Feedback.create(word, marks);
         List<Character> hint = feedback.giveHint(new ArrayList<>(), word);
 
-        assertEquals(hint, expectedHint);
+        assertEquals(expectedHint, hint);
     }
 
     @ParameterizedTest
@@ -138,6 +136,6 @@ class FeedbackTest {
         Feedback feedback = Feedback.create(word, marks);
         List<Character> hint = feedback.giveHint(new ArrayList<>(), word);
 
-        assertEquals(hint.get(0), word.charAt(0));
+        assertEquals(word.charAt(0), hint.get(0));
     }
 }
