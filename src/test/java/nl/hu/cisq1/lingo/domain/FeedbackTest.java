@@ -51,6 +51,30 @@ class FeedbackTest {
 
     }
 
+    @Test
+    @DisplayName("feedback correct constructor returns word has been guessed")
+    void feedbackCorrectConstructorTest() {
+        assertTrue(Feedback.correct("test").isWordGuessed());
+    }
+
+    @Test
+    @DisplayName("feedback correct constructor returns guess is valid")
+    void feedbackCorrectConstructorValidityTest() {
+        assertTrue(Feedback.correct("test").isGuessValid());
+    }
+
+    @Test
+    @DisplayName("feedback incorrect constructor returns word has not been guessed")
+    void feedbackIncorrectConstructorTest() {
+        assertFalse(Feedback.incorrect("test").isWordGuessed());
+    }
+
+    @Test
+    @DisplayName("feedback invalid constructor returns word is invalid")
+    void feedbackInvalidConstructorTest() {
+        assertFalse(Feedback.invalid("test").isGuessValid());
+    }
+
     static Stream<Arguments> provideHintExamples() {
         List<String> guessWords = Arrays.asList("words", "hello", "array", "marks", "error");
 
