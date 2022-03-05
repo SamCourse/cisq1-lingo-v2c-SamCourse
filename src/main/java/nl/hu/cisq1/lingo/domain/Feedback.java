@@ -35,6 +35,54 @@ public class Feedback {
         return new Feedback(attempt, Collections.nCopies(attempt.length(), Mark.INVALID));
     }
 
+    public static List<Mark> calculateMarks(String guess, String answer) {
+        if (guess.length() != answer.length()) {
+            throw new InvalidFeedbackException();
+        }
+
+        Map<Integer, Mark> marks = new HashMap<>();
+        List<Integer> answerIndexesUsed = new ArrayList<>();    // Indexes of the answer that have been used,
+                                                                // e.g. when the letter at this index has been marked as present somewhere else.
+
+        for (int i = 0; i < guess.length(); i++) {
+            if (marks.containsKey(i)) {
+                continue;
+            }
+
+            char character = guess.charAt(i);
+            if (character == answer.charAt(i)) {
+                marks.put(i, Mark.CORRECT);
+                answerIndexesUsed.add(i);
+            } else if (answer.indexOf(character) == -1) {
+                marks.put(i, Mark.ABSENT);
+            } else {
+                int index = answer.indexOf(character);
+                while (answerIndexesUsed.contains(index)) {
+                    index = answer.indexOf(character, index+1);
+                }
+
+                if (index == -1) {
+                    marks.put(i, Mark.ABSENT);
+                } else if (guess.charAt(index) == character) {
+                    marks.put(index, Mark.CORRECT);
+                    answerIndexesUsed.add(index);
+                    i--;
+                } else {
+                    marks.put(i, Mark.PRESENT);
+                    answerIndexesUsed.add(index);
+                }
+            }
+        }
+
+        List<Mark> marksList = new ArrayList<>();
+
+        for (Integer key: new TreeSet<>(marks.keySet())) {
+            marksList.add(marks.get(key));
+        }
+
+        return marksList;
+    }
+
     public List<Character> giveHint(List<Character> previousHint, String wordToGuess) {
         if (!previousHint.isEmpty() && previousHint.size() != wordToGuess.length()) {
             throw new InvalidPreviousHintException();

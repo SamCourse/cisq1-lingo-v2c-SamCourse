@@ -138,4 +138,47 @@ class FeedbackTest {
 
         assertEquals(word.charAt(0), hint.get(0));
     }
+
+    static Stream<Arguments> provideMarkProcessingExamples() {
+        String answer = "words";
+        Map<String, List<Mark>> guesses = new HashMap<>() {{
+           put("woods", Arrays.asList(CORRECT, CORRECT, ABSENT, CORRECT, CORRECT));
+           put("whale", Arrays.asList(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT));
+           put("shred", Arrays.asList(PRESENT, ABSENT, CORRECT, ABSENT, PRESENT));
+           put("strss", Arrays.asList(ABSENT, ABSENT, CORRECT, ABSENT, CORRECT));
+           put("words", Arrays.asList(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT));
+           put("bawes", Arrays.asList(ABSENT, ABSENT, PRESENT, ABSENT, CORRECT));
+           put("ddodr", Arrays.asList(ABSENT, ABSENT, PRESENT, CORRECT, PRESENT));
+           put("wdowr", Arrays.asList(CORRECT, PRESENT, PRESENT, ABSENT, PRESENT));
+           put("sdrow", Arrays.asList(PRESENT, PRESENT, CORRECT, PRESENT, PRESENT));
+           put("wwwww", Arrays.asList(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT));
+           put("wdwdr", Arrays.asList(CORRECT, ABSENT, ABSENT, CORRECT, PRESENT));
+        }};
+
+        String answer2 = "saws";
+        Map<String, List<Mark>> guesses2 = new HashMap<>() {{
+            put("woss", Arrays.asList(PRESENT, ABSENT, PRESENT, CORRECT));
+            put("ssas", Arrays.asList(CORRECT, ABSENT, PRESENT, CORRECT));
+            put("aaws", Arrays.asList(ABSENT, CORRECT, CORRECT, CORRECT));
+        }};
+
+
+        List<Arguments> arguments = new ArrayList<>();
+        for (Map.Entry<String, List<Mark>> entries: guesses.entrySet()) {
+            arguments.add(Arguments.of(entries.getKey(), answer, entries.getValue()));
+        }
+        for (Map.Entry<String, List<Mark>> entries2: guesses2.entrySet()) {
+            arguments.add(Arguments.of(entries2.getKey(), answer2, entries2.getValue()));
+        }
+
+        return arguments.stream();
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideMarkProcessingExamples")
+    @DisplayName("marks returned from mark processing are correct")
+    void markCalculationTest(String guess, String answer, List<Mark> expectedMarks) {
+        List<Mark> marks = Feedback.calculateMarks(guess, answer);
+        assertEquals(expectedMarks, marks);
+    }
 }
