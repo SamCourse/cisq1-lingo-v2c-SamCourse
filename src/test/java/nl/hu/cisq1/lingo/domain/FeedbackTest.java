@@ -1,6 +1,7 @@
 package nl.hu.cisq1.lingo.domain;
 
 import nl.hu.cisq1.lingo.domain.exception.InvalidFeedbackException;
+import nl.hu.cisq1.lingo.domain.exception.InvalidPreviousHintException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -181,6 +182,24 @@ class FeedbackTest {
 
         assertEquals(word.charAt(0), hint.get(0));
     }
+
+
+    @ParameterizedTest
+    @MethodSource("provideHintExamples")
+    @DisplayName("mismatched hint and word size exception in giveHint")
+    void giveHintThrowsExceptionIfMismatchedLengths(String word, List<Mark> marks) {
+        Feedback feedback = Feedback.create(word, marks);
+        List<Character> improperLastHint = new ArrayList<>();
+
+        for (int i = 0; i < word.length() - 1; i++) {
+            improperLastHint.add(word.charAt(i));
+        }
+
+        assertThrows(InvalidPreviousHintException.class,
+                () -> feedback.giveHint(improperLastHint, word));
+    }
+
+
 
     static Stream<Arguments> provideMarkProcessingExamples() {
         String answer = "words";
