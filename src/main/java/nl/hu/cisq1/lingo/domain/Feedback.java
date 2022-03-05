@@ -94,6 +94,10 @@ public class Feedback {
             throw new InvalidPreviousHintException();
         }
 
+        if (marks.contains(Mark.INVALID)) {
+            return previousHint;
+        }
+
         List<Character> newHint = new ArrayList<>();
 
         newHint.add(wordToGuess.charAt(0));
