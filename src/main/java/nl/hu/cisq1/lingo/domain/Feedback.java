@@ -15,6 +15,10 @@ public class Feedback {
     private final String attempt;
     private final List<Mark> marks;
 
+    public static Feedback create(String attempt, String answer) {
+        return Feedback.create(attempt, calculateMarks(attempt, answer));
+    }
+
     public static Feedback create(String attempt, List<Mark> marks) {
         if (attempt.length() != marks.size()) {
             throw new InvalidFeedbackException();
@@ -24,18 +28,18 @@ public class Feedback {
     }
 
     public static Feedback correct(String attempt) {
-        return new Feedback(attempt, Collections.nCopies(attempt.length(), Mark.CORRECT));
+        return Feedback.create(attempt, Collections.nCopies(attempt.length(), Mark.CORRECT));
     }
 
     public static Feedback incorrect(String attempt) {
-        return new Feedback(attempt, Collections.nCopies(attempt.length(), Mark.ABSENT));
+        return Feedback.create(attempt, Collections.nCopies(attempt.length(), Mark.ABSENT));
     }
 
     public static Feedback invalid(String attempt) {
-        return new Feedback(attempt, Collections.nCopies(attempt.length(), Mark.INVALID));
+        return Feedback.create(attempt, Collections.nCopies(attempt.length(), Mark.INVALID));
     }
 
-    public static List<Mark> calculateMarks(String guess, String answer) {
+    private static List<Mark> calculateMarks(String guess, String answer) {
         if (guess.length() != answer.length()) {
             throw new InvalidFeedbackException();
         }
