@@ -1,7 +1,9 @@
 package nl.hu.cisq1.lingo.domain;
 
-import nl.hu.cisq1.lingo.domain.exception.InvalidFeedbackException;
-import nl.hu.cisq1.lingo.domain.exception.InvalidPreviousHintException;
+import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidFeedbackException;
+import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidPreviousHintException;
+import nl.hu.cisq1.lingo.feedback.domain.Feedback;
+import nl.hu.cisq1.lingo.feedback.domain.Mark;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,7 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static nl.hu.cisq1.lingo.domain.Mark.*;
+import static nl.hu.cisq1.lingo.feedback.domain.Mark.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FeedbackTest {

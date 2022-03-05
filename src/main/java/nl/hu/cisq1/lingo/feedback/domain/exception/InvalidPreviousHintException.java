@@ -1,4 +1,4 @@
-package nl.hu.cisq1.lingo.domain.exception;
+package nl.hu.cisq1.lingo.feedback.domain.exception;
 
 public class InvalidPreviousHintException extends RuntimeException {
     public InvalidPreviousHintException() {

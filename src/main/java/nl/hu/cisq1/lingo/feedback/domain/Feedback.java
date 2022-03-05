@@ -1,24 +1,20 @@
-package nl.hu.cisq1.lingo.domain;
+package nl.hu.cisq1.lingo.feedback.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
-import nl.hu.cisq1.lingo.domain.exception.InvalidFeedbackException;
-import nl.hu.cisq1.lingo.domain.exception.InvalidPreviousHintException;
+import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidFeedbackException;
+import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidPreviousHintException;
 
 import java.util.*;
 
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
 public class Feedback {
     private final String attempt;
     @Getter
     private final List<Mark> marks;
 
-    public static Feedback create(String attempt, String answer) {
-        return Feedback.create(attempt, calculateMarks(attempt, answer));
+    public static Feedback create(String guess, String answer) {
+        return Feedback.create(guess, calculateMarks(guess, answer));
     }
 
     public static Feedback create(String attempt, List<Mark> marks) {
