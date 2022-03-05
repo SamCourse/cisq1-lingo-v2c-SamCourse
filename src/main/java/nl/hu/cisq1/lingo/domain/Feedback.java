@@ -94,9 +94,7 @@ public class Feedback {
 
         List<Character> newHint = new ArrayList<>();
 
-        if (previousHint.isEmpty()) {
-            newHint.add(wordToGuess.charAt(0));
-        }
+        newHint.add(wordToGuess.charAt(0));
 
         for (int i = 1; i < attempt.length(); i++) {
             char letter = attempt.charAt(i);
