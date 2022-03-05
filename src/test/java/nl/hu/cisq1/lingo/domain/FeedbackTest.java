@@ -83,24 +83,28 @@ class FeedbackTest {
         return Stream.of(
                 Arguments.of(guessWord,
                         Arrays.asList(CORRECT, PRESENT, ABSENT, CORRECT, CORRECT),
-                        Arrays.asList(guessWord.charAt(0), Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(3), guessWord.charAt(4))),
+                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, guessWord.charAt(3), guessWord.charAt(4)),
+                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, guessWord.charAt(3), guessWord.charAt(4))),
 
                 Arguments.of(guessWord,
                         Arrays.asList(PRESENT, CORRECT, CORRECT, CORRECT, ABSENT),
-                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), guessWord.charAt(3), Character.MIN_VALUE)),
+                        Arrays.asList(Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(4)),
+                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), guessWord.charAt(3), guessWord.charAt(4)),
 
                 Arguments.of(guessWord,
                         Arrays.asList(PRESENT, PRESENT, ABSENT, CORRECT, CORRECT),
-                        Arrays.asList(guessWord.charAt(0), Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(3), guessWord.charAt(4))),
+                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), Character.MIN_VALUE, Character.MIN_VALUE),
+                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), guessWord.charAt(3), guessWord.charAt(4))),
 
                 Arguments.of(guessWord,
                         Arrays.asList(CORRECT, CORRECT, ABSENT, CORRECT, PRESENT),
+                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE),
                         Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE)),
 
                 Arguments.of(guessWord,
                         Arrays.asList(ABSENT, PRESENT, ABSENT, PRESENT, ABSENT),
-                        Arrays.asList(guessWord.charAt(0), Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE))
-        );
+                        Arrays.asList(Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE),
+                        Arrays.asList(guessWord.charAt(0), Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE))));
     }
 
     @ParameterizedTest
@@ -143,12 +147,27 @@ class FeedbackTest {
         }
     }
 
+
+    @ParameterizedTest
+    @MethodSource("provideHintExamples")
+    @DisplayName("hint returned takes previous hint in consideration")
+    void hintReturnedUsesFallback(String word, List<Mark> marks, List<Character> lastHint, List<Character> expectedHint) {
+        Feedback feedback = Feedback.create(word, marks);
+        List<Character> newHint = feedback.giveHint(lastHint, word);
+
+        for (int i = 0; i < lastHint.size(); i++) {
+            if (lastHint.get(i) != Character.MIN_VALUE) {
+                assertEquals(lastHint.get(i), newHint.get(i));
+            }
+        }
+    }
+
     @ParameterizedTest
     @MethodSource("provideHintExamples")
     @DisplayName("hint returned matches expected hint")
-    void hintReturnedIsCorrect(String word, List<Mark> marks, List<Character> expectedHint) {
+    void hintReturnedIsCorrect(String word, List<Mark> marks, List<Character> lastHint, List<Character> expectedHint) {
         Feedback feedback = Feedback.create(word, marks);
-        List<Character> hint = feedback.giveHint(new ArrayList<>(), word);
+        List<Character> hint = feedback.giveHint(lastHint, word);
 
         assertEquals(expectedHint, hint);
     }
@@ -202,7 +221,8 @@ class FeedbackTest {
     @MethodSource("provideMarkProcessingExamples")
     @DisplayName("marks returned from mark processing are correct")
     void markCalculationTest(String guess, String answer, List<Mark> expectedMarks) {
-        List<Mark> marks = Feedback.calculateMarks(guess, answer);
+        Feedback feedback = Feedback.create(guess, answer);
+        List<Mark> marks = feedback.getMarks();
         assertEquals(expectedMarks, marks);
     }
 }
