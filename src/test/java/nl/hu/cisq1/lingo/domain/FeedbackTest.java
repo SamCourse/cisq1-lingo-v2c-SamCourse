@@ -80,6 +80,13 @@ class FeedbackTest {
         assertFalse(Feedback.invalid("test").isGuessValid());
     }
 
+    @Test
+    @DisplayName("feedback constructor throws exception if mismatched lengths")
+    void feedbackConstructorThrowsWhenLengthMismatch() {
+        assertThrows(InvalidFeedbackException.class,
+                () -> Feedback.create("word", "words"));
+    }
+
     static Stream<Arguments> provideHintExamples() {
         List<String> guessWords = Arrays.asList("words", "hello", "array", "marks", "error");
 
@@ -203,6 +210,14 @@ class FeedbackTest {
                 () -> feedback.giveHint(improperLastHint, word));
     }
 
+
+    @ParameterizedTest
+    @MethodSource("provideHintExamples")
+    @DisplayName("giveHint returns last hint if word is invalid")
+    void giveHintProperlyHandlesInvalid(String word) {
+        Feedback feedback = Feedback.create(wrongAnswer, List.of(INVALID, INVALID, INVALID, INVALID, INVALID));
+        assertEquals(new ArrayList<>(), feedback.giveHint(new ArrayList<>(), word));
+    }
 
 
     static Stream<Arguments> provideMarkProcessingExamples() {
