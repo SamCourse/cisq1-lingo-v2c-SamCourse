@@ -16,7 +16,9 @@ import java.util.stream.Stream;
 import static nl.hu.cisq1.lingo.feedback.domain.Mark.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("Feedback")
 class FeedbackTest {
+    String wrongAnswer = "tests";
 
     @Test
     @DisplayName("word is guessed if all letters are correct")
@@ -94,20 +96,20 @@ class FeedbackTest {
                         Arrays.asList(Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(4)),
                         Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), guessWord.charAt(3), guessWord.charAt(4)),
 
-                Arguments.of(guessWord,
-                        Arrays.asList(PRESENT, PRESENT, ABSENT, CORRECT, CORRECT),
-                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), Character.MIN_VALUE, Character.MIN_VALUE),
-                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), guessWord.charAt(3), guessWord.charAt(4))),
+                        Arguments.of(guessWord,
+                                Arrays.asList(PRESENT, PRESENT, ABSENT, CORRECT, CORRECT),
+                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), Character.MIN_VALUE, Character.MIN_VALUE),
+                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), guessWord.charAt(3), guessWord.charAt(4))),
 
-                Arguments.of(guessWord,
-                        Arrays.asList(CORRECT, CORRECT, ABSENT, CORRECT, PRESENT),
-                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE),
-                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE)),
+                        Arguments.of(guessWord,
+                                Arrays.asList(CORRECT, CORRECT, ABSENT, CORRECT, PRESENT),
+                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE),
+                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE)),
 
-                Arguments.of(guessWord,
-                        Arrays.asList(ABSENT, PRESENT, ABSENT, PRESENT, ABSENT),
-                        Arrays.asList(Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE),
-                        Arrays.asList(guessWord.charAt(0), Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE))));
+                        Arguments.of(guessWord,
+                                Arrays.asList(ABSENT, PRESENT, ABSENT, PRESENT, ABSENT),
+                                Arrays.asList(Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE),
+                                Arrays.asList(guessWord.charAt(0), Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE))));
     }
 
     @ParameterizedTest
@@ -115,7 +117,7 @@ class FeedbackTest {
     @DisplayName("hint returned is the same length as the word to guess")
     void hintReturnedMatchesAnswerLength(String word, List<Mark> marks) {
         Feedback feedback = Feedback.create(word, marks);
-        List<Character> hint = feedback.giveHint(new ArrayList<>(), word);
+        List<Character> hint = feedback.giveHint(new ArrayList<>(), wrongAnswer);
 
         assertEquals(word.length(), hint.size());
     }
@@ -206,17 +208,17 @@ class FeedbackTest {
     static Stream<Arguments> provideMarkProcessingExamples() {
         String answer = "words";
         Map<String, List<Mark>> guesses = new HashMap<>() {{
-           put("woods", Arrays.asList(CORRECT, CORRECT, ABSENT, CORRECT, CORRECT));
-           put("whale", Arrays.asList(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT));
-           put("shred", Arrays.asList(PRESENT, ABSENT, CORRECT, ABSENT, PRESENT));
-           put("strss", Arrays.asList(ABSENT, ABSENT, CORRECT, ABSENT, CORRECT));
-           put("words", Arrays.asList(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT));
-           put("bawes", Arrays.asList(ABSENT, ABSENT, PRESENT, ABSENT, CORRECT));
-           put("ddodr", Arrays.asList(ABSENT, ABSENT, PRESENT, CORRECT, PRESENT));
-           put("wdowr", Arrays.asList(CORRECT, PRESENT, PRESENT, ABSENT, PRESENT));
-           put("sdrow", Arrays.asList(PRESENT, PRESENT, CORRECT, PRESENT, PRESENT));
-           put("wwwww", Arrays.asList(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT));
-           put("wdwdr", Arrays.asList(CORRECT, ABSENT, ABSENT, CORRECT, PRESENT));
+            put("woods", Arrays.asList(CORRECT, CORRECT, ABSENT, CORRECT, CORRECT));
+            put("whale", Arrays.asList(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT));
+            put("shred", Arrays.asList(PRESENT, ABSENT, CORRECT, ABSENT, PRESENT));
+            put("strss", Arrays.asList(ABSENT, ABSENT, CORRECT, ABSENT, CORRECT));
+            put("words", Arrays.asList(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT));
+            put("bawes", Arrays.asList(ABSENT, ABSENT, PRESENT, ABSENT, CORRECT));
+            put("ddodr", Arrays.asList(ABSENT, ABSENT, PRESENT, CORRECT, PRESENT));
+            put("wdowr", Arrays.asList(CORRECT, PRESENT, PRESENT, ABSENT, PRESENT));
+            put("sdrow", Arrays.asList(PRESENT, PRESENT, CORRECT, PRESENT, PRESENT));
+            put("wwwww", Arrays.asList(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT));
+            put("wdwdr", Arrays.asList(CORRECT, ABSENT, ABSENT, CORRECT, PRESENT));
         }};
 
         String answer2 = "saws";
@@ -228,10 +230,10 @@ class FeedbackTest {
 
 
         List<Arguments> arguments = new ArrayList<>();
-        for (Map.Entry<String, List<Mark>> entries: guesses.entrySet()) {
+        for (Map.Entry<String, List<Mark>> entries : guesses.entrySet()) {
             arguments.add(Arguments.of(entries.getKey(), answer, entries.getValue()));
         }
-        for (Map.Entry<String, List<Mark>> entries2: guesses2.entrySet()) {
+        for (Map.Entry<String, List<Mark>> entries2 : guesses2.entrySet()) {
             arguments.add(Arguments.of(entries2.getKey(), answer2, entries2.getValue()));
         }
 
