@@ -1,7 +1,6 @@
-package nl.hu.cisq1.lingo.domain;
+package nl.hu.cisq1.lingo.round.domain;
 
 import nl.hu.cisq1.lingo.round.domain.exception.RoundAlreadyOverException;
-import nl.hu.cisq1.lingo.round.domain.Round;
 import nl.hu.cisq1.lingo.words.domain.Word;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -80,6 +79,23 @@ class RoundTest {
         round.guess(wrongWord);
 
         assertTrue(round.hasBeenLost());
+    }
+
+    @Test
+    @DisplayName("round has been won if the word has been guessed and tries count has reached 5")
+    void roundHasBeenWonWith5Tries() {
+        Round round = new Round(wordToGuess);
+        assertFalse(round.hasBeenLost());
+
+        round.guess(wrongWord);
+        round.guess(wrongWord);
+        round.guess(wrongWord);
+        round.guess(wrongWord);
+        assertFalse(round.hasBeenLost());
+
+        round.guess(wordToGuess);
+
+        assertFalse(round.hasBeenLost());
     }
 
     @Test
