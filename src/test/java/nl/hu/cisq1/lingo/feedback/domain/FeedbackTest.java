@@ -1,4 +1,4 @@
-package nl.hu.cisq1.lingo.domain;
+package nl.hu.cisq1.lingo.feedback.domain;
 
 import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidFeedbackException;
 import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidPreviousHintException;
