@@ -1,5 +1,6 @@
 package nl.hu.cisq1.lingo.feedback.domain;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidFeedbackException;
@@ -7,7 +8,7 @@ import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidPreviousHintException;
 
 import java.util.*;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Feedback {
     private final String attempt;
     @Getter
@@ -37,6 +38,11 @@ public class Feedback {
         return Feedback.create(attempt, Collections.nCopies(attempt.length(), Mark.INVALID));
     }
 
+    public static Feedback initialFeedback(String answer) {
+        return Feedback.create(answer.charAt(0) + "    ",
+                List.of(Mark.CORRECT, Mark.ABSENT, Mark.ABSENT, Mark.ABSENT, Mark.ABSENT));
+    }
+
     private static List<Mark> calculateMarks(String guess, String answer) {
         if (guess.length() != answer.length()) {
             throw new InvalidFeedbackException();
@@ -44,7 +50,7 @@ public class Feedback {
 
         Map<Integer, Mark> marks = new HashMap<>();
         List<Integer> answerIndexesUsed = new ArrayList<>();    // Indexes of the answer that have been used,
-                                                                // e.g. when the letter at this index has been marked as present somewhere else.
+        // e.g. when the letter at this index has been marked as present somewhere else.
 
         for (int i = 0; i < guess.length(); i++) {
             if (marks.containsKey(i)) {
@@ -60,7 +66,7 @@ public class Feedback {
             } else {
                 int index = answer.indexOf(character);
                 while (answerIndexesUsed.contains(index)) {
-                    index = answer.indexOf(character, index+1);
+                    index = answer.indexOf(character, index + 1);
                 }
 
                 if (index == -1) {
@@ -78,7 +84,7 @@ public class Feedback {
 
         List<Mark> marksList = new ArrayList<>();
 
-        for (Integer key: new TreeSet<>(marks.keySet())) {
+        for (Integer key : new TreeSet<>(marks.keySet())) {
             marksList.add(marks.get(key));
         }
 
@@ -102,12 +108,10 @@ public class Feedback {
             char letter = attempt.charAt(i);
             if (marks.get(i) == Mark.CORRECT) {
                 newHint.add(letter);
-            } else if (marks.get(i) == Mark.PRESENT || marks.get(i) == Mark.ABSENT) {
-                if (previousHint.isEmpty() || previousHint.get(i) == Character.MIN_VALUE) {
-                    newHint.add(Character.MIN_VALUE);
-                } else {
-                    newHint.add(previousHint.get(i));
-                }
+            } else if (previousHint.isEmpty() || previousHint.get(i) == Character.MIN_VALUE) {
+                newHint.add(Character.MIN_VALUE);
+            } else {
+                newHint.add(previousHint.get(i));
             }
         }
 
