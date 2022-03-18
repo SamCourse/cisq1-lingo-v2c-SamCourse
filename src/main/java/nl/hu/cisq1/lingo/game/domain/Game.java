@@ -6,18 +6,34 @@ import nl.hu.cisq1.lingo.round.domain.exception.NoRoundFoundException;
 import nl.hu.cisq1.lingo.round.domain.exception.RoundNotEndedException;
 import nl.hu.cisq1.lingo.words.domain.Word;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+
+@Entity
 public class Game {
+    @Id
+    private UUID id;
+
+    @OneToMany
     private final List<Round> rounds;
     @Getter
     private int points;
     @Getter
     private boolean isOver;
 
+    public UUID getId() {
+        return id;
+    }
+
     public Game() {
         this.rounds = new ArrayList<>();
+        this.isOver = false;
     }
 
     public Round initializeRound(Word word) {

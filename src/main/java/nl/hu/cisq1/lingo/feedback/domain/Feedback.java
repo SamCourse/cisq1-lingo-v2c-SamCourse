@@ -3,16 +3,28 @@ package nl.hu.cisq1.lingo.feedback.domain;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidFeedbackException;
 import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidPreviousHintException;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.*;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@Entity
 public class Feedback {
-    private final String attempt;
+    @Id
+    private UUID id;
+    private String attempt;
     @Getter
-    private final List<Mark> marks;
+    // TODO: Add attribute converter
+    private List<Mark> marks;
+
+    public Feedback(String attempt, List<Mark> marks) {
+        this.attempt = attempt;
+        this.marks = marks;
+    }
 
     public static Feedback create(String guess, String answer) {
         return Feedback.create(guess, calculateMarks(guess, answer));

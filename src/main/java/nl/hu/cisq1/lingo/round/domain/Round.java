@@ -1,21 +1,34 @@
 package nl.hu.cisq1.lingo.round.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import nl.hu.cisq1.lingo.round.domain.exception.RoundAlreadyOverException;
 import nl.hu.cisq1.lingo.feedback.domain.Feedback;
 import nl.hu.cisq1.lingo.guess.domain.Guess;
 import nl.hu.cisq1.lingo.words.domain.Word;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@Entity
+@NoArgsConstructor
 public class Round {
-    private final Word answer;
-    private final List<Guess> guesses;
+    @Id
+    private UUID id;
+    @OneToOne
+    private Word answer;
+    @OneToMany
+    private List<Guess> guesses;
+
     @Getter
     private int tries;
     @Getter
-    private final int wordLength;
+    private int wordLength;
 
     public Round(Word answer) {
         this.answer = answer;
