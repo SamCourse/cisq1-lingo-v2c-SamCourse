@@ -16,6 +16,7 @@ import java.util.UUID;
 @Entity
 public class Game {
     @Id
+    @GeneratedValue
     private UUID id;
 
     @OneToMany(cascade = CascadeType.ALL)

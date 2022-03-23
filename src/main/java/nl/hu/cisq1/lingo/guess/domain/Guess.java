@@ -13,6 +13,7 @@ import java.util.UUID;
 @Entity
 public class Guess {
     @Id
+    @GeneratedValue
     private UUID id;
     private String attempt;
     @OneToOne(cascade = CascadeType.ALL)

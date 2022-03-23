@@ -16,6 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Round {
     @Id
+    @GeneratedValue
     private UUID id;
     private String answer;
     @OneToMany(cascade = CascadeType.ALL)

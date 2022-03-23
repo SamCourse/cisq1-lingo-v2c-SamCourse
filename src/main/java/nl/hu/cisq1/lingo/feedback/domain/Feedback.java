@@ -1,20 +1,18 @@
 package nl.hu.cisq1.lingo.feedback.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidFeedbackException;
 import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidPreviousHintException;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.*;
 
 @NoArgsConstructor
 @Entity
 public class Feedback {
     @Id
+    @GeneratedValue
     private UUID id;
     private String attempt;
     @Getter
