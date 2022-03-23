@@ -16,13 +16,12 @@ import java.util.UUID;
 public class Guess {
     @Id
     private UUID id;
-    @OneToOne
-    private Word attempt;
+    private String attempt;
     @Getter
     @OneToOne
     private Feedback feedback;
 
-    public Guess(Word attempt, Feedback feedback) {
+    public Guess(String attempt, Feedback feedback) {
         this.attempt = attempt;
         this.feedback = feedback;
     }

@@ -1,7 +1,6 @@
 package nl.hu.cisq1.lingo.round.domain;
 
 import nl.hu.cisq1.lingo.round.domain.exception.RoundAlreadyOverException;
-import nl.hu.cisq1.lingo.words.domain.Word;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -9,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Round")
 class RoundTest {
-    Word wordToGuess = new Word("test");
-    Word wrongWord = new Word("tset");
+    String wordToGuess = "test";
+    String wrongWord = "tset";
 
     @Test
     @DisplayName("round has not ended if the tries count is not yet 5 and if answer has not been guessed")

@@ -36,7 +36,7 @@ public class Game {
         this.isOver = false;
     }
 
-    public Round initializeRound(Word word) {
+    public Round initializeRound(String word) {
         if (!rounds.isEmpty() && !getLastRound().hasEnded()) {
             throw new RoundNotEndedException("Can not start new round; last round has not ended yet.");
         }

@@ -3,7 +3,6 @@ package nl.hu.cisq1.lingo.game.domain;
 import nl.hu.cisq1.lingo.round.domain.Round;
 import nl.hu.cisq1.lingo.round.domain.exception.NoRoundFoundException;
 import nl.hu.cisq1.lingo.round.domain.exception.RoundNotEndedException;
-import nl.hu.cisq1.lingo.words.domain.Word;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
     Game game;
-    Word answer = new Word("tests");
-    Word wrongAnswer = new Word("hello");
+    String answer = "tests";
+    String wrongAnswer = "hello";
 
     @BeforeEach
     void resetGame() {
@@ -36,7 +35,7 @@ class GameTest {
     @Test
     @DisplayName("last round does not throw exception if round has been initiated")
     void lastRoundAfterInitDoesNotThrow() {
-        game.initializeRound(new Word("tests"));
+        game.initializeRound("tests");
         assertDoesNotThrow(game::getLastRound);
     }
 
@@ -62,7 +61,7 @@ class GameTest {
         Round round = game.initializeRound(answer);
         List<Character> hint = round.getFirstHint();
 
-        assertEquals(answer.getValue().charAt(0), hint.get(0));
+        assertEquals(answer.charAt(0), hint.get(0));
     }
 
     @Test
@@ -122,14 +121,14 @@ class GameTest {
     @Test
     @DisplayName("6-letter round finished will be followed by 7-letter round")
     void gameFollows6letterRoundWith7() {
-        game.initializeRound(new Word("tester"));
+        game.initializeRound("tester");
         assertEquals(7, game.getNextRoundWordLength());
     }
 
     @Test
     @DisplayName("7-letter round finished will be followed by 5-letter round")
     void gameFollows7letterRoundWith5() {
-        game.initializeRound(new Word("testing"));
+        game.initializeRound("testing");
         assertEquals(5, game.getNextRoundWordLength());
     }
 
