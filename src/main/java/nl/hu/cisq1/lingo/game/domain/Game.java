@@ -5,11 +5,9 @@ import nl.hu.cisq1.lingo.round.domain.Round;
 import nl.hu.cisq1.lingo.round.domain.exception.NoRoundFoundException;
 import nl.hu.cisq1.lingo.round.domain.exception.RoundNotEndedException;
 import nl.hu.cisq1.lingo.words.domain.Word;
+import org.hibernate.annotations.Cascade;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +18,7 @@ public class Game {
     @Id
     private UUID id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private final List<Round> rounds;
     @Getter
     private int points;

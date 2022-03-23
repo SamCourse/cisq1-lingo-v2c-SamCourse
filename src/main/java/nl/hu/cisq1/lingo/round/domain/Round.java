@@ -17,8 +17,8 @@ import java.util.UUID;
 public class Round {
     @Id
     private UUID id;
-    @OneToMany
     private String answer;
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Guess> guesses;
     @Getter
     private int tries;

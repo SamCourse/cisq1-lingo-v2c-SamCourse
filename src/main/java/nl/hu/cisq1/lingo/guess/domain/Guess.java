@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 import nl.hu.cisq1.lingo.feedback.domain.Feedback;
 import nl.hu.cisq1.lingo.words.domain.Word;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -17,8 +15,8 @@ public class Guess {
     @Id
     private UUID id;
     private String attempt;
+    @OneToOne(cascade = CascadeType.ALL)
     @Getter
-    @OneToOne
     private Feedback feedback;
 
     public Guess(String attempt, Feedback feedback) {
