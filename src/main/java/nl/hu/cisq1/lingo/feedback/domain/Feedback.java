@@ -16,7 +16,8 @@ public class Feedback {
     private UUID id;
     private String attempt;
     @Getter
-    // TODO: Add attribute converter
+    @Enumerated
+    @ElementCollection(targetClass = Mark.class)
     private List<Mark> marks;
 
     public Feedback(String attempt, List<Mark> marks) {
