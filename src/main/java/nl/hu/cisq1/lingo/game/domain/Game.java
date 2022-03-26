@@ -4,14 +4,11 @@ import lombok.Getter;
 import nl.hu.cisq1.lingo.round.domain.Round;
 import nl.hu.cisq1.lingo.round.domain.exception.NoRoundFoundException;
 import nl.hu.cisq1.lingo.round.domain.exception.RoundNotEndedException;
-import nl.hu.cisq1.lingo.words.domain.Word;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 
 @Entity
 @Getter
@@ -48,10 +45,10 @@ public class Game {
             throw new RoundNotEndedException("Can not complete this round as it has not ended yet.");
         }
 
-        this.isOver = true;
-
         if (round.hasBeenWon()) {
             this.points += calculatePoints(round.getTries());
+        } else {
+            this.isOver = true;
         }
     }
 
