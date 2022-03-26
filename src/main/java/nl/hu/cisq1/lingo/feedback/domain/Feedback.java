@@ -105,7 +105,11 @@ public class Feedback {
         return marksList;
     }
 
-    public List<Character> giveHint(List<Character> previousHint, String wordToGuess) {
+    public List<Character> calculateHint(String wordToGuess) {
+        return calculateHint(lastHint, wordToGuess);
+    }
+
+    public List<Character> calculateHint(List<Character> previousHint, String wordToGuess) {
         if (!previousHint.isEmpty() && previousHint.size() != wordToGuess.length()) {
             throw new InvalidPreviousHintException();
         }
