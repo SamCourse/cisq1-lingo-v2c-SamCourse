@@ -1,8 +1,6 @@
 package nl.hu.cisq1.lingo.game.presentation.dto;
 
 import nl.hu.cisq1.lingo.game.domain.Game;
-import nl.hu.cisq1.lingo.guess.presentation.dto.GuessResponseDTO;
-import nl.hu.cisq1.lingo.round.domain.Round;
 import nl.hu.cisq1.lingo.round.presentation.dto.RoundResponseDTO;
 
 import javax.validation.constraints.NotNull;
