@@ -45,7 +45,11 @@ public class Round {
     }
 
     public List<Character> getFirstHint() {
-        return Feedback.initialFeedback(answer).giveHint(new ArrayList<>(), answer);
+        if (firstHint == null || firstHint.isEmpty()) {
+            firstHint = Feedback.initialFeedback(answer).calculateHint(answer);
+        }
+
+        return firstHint;
     }
 
     public boolean hasEnded() {

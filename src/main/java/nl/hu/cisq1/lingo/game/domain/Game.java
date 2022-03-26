@@ -14,6 +14,7 @@ import java.util.UUID;
 
 
 @Entity
+@Getter
 public class Game {
     @Id
     @GeneratedValue
@@ -21,14 +22,8 @@ public class Game {
 
     @OneToMany(cascade = CascadeType.ALL)
     private final List<Round> rounds;
-    @Getter
     private int points;
-    @Getter
     private boolean isOver;
-
-    public UUID getId() {
-        return id;
-    }
 
     public Game() {
         this.rounds = new ArrayList<>();
