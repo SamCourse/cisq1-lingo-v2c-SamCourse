@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import nl.hu.cisq1.lingo.feedback.domain.Feedback;
 import nl.hu.cisq1.lingo.guess.domain.Guess;
 import nl.hu.cisq1.lingo.round.domain.exception.RoundAlreadyOverException;
-import nl.hu.cisq1.lingo.words.domain.Word;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +13,7 @@ import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class Round {
     @Id
     @GeneratedValue
@@ -21,9 +21,7 @@ public class Round {
     private String answer;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Guess> guesses;
-    @Getter
     private int tries;
-    @Getter
     private int wordLength;
     @ElementCollection
     private List<Character> firstHint;
@@ -35,11 +33,22 @@ public class Round {
     }
 
     public void guess(String attempt) {
+        this.guess(attempt, false);
+    }
+
+    public void guess(String attempt, boolean invalid) {
         if (this.hasEnded()) {
             throw new RoundAlreadyOverException();
         }
 
-        Feedback feedback = Feedback.create(attempt, answer);
+        Feedback feedback;
+
+        if (invalid) {
+            feedback = Feedback.invalid(attempt);
+        } else {
+            feedback = Feedback.create(attempt, answer);
+        }
+
         guesses.add(new Guess(attempt, feedback));
         tries++;
     }
