@@ -92,6 +92,7 @@
                 <configuration>
                     <excludes>
                         <exclude>*DTO.*</exclude>
+                        <exclude>nl.hu.cisq1.lingo.LingoApplication</exclude>
                     </excludes>
                 </configuration>
 
