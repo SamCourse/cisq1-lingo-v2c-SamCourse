@@ -47,9 +47,8 @@ public class GameService {
         Round round = game.getLastRound();
 
         if (word.length() > currentRoundWordLength) {
-            word = word.substring(0, currentRoundWordLength - 1);
+            word = word.substring(0, currentRoundWordLength);
         }
-
         boolean invalid = !wordService.wordExists(word) || word.length() < currentRoundWordLength;
 
         round.guess(word, invalid);
