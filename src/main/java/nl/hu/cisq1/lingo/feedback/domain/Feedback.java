@@ -10,19 +10,22 @@ import java.util.*;
 
 @NoArgsConstructor
 @Entity
+@Getter
 public class Feedback {
     @Id
     @GeneratedValue
     private UUID id;
     private String attempt;
-    @Getter
     @Enumerated
     @ElementCollection(targetClass = Mark.class)
     private List<Mark> marks;
+    @ElementCollection(targetClass = Character.class)
+    private List<Character> lastHint;
 
     public Feedback(String attempt, List<Mark> marks) {
         this.attempt = attempt;
         this.marks = marks;
+        this.lastHint = new ArrayList<>();
     }
 
     public static Feedback create(String guess, String answer) {
@@ -125,6 +128,8 @@ public class Feedback {
                 newHint.add(previousHint.get(i));
             }
         }
+
+        this.lastHint = newHint;
 
         return newHint;
     }
