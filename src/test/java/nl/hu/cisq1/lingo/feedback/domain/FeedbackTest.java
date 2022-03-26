@@ -95,28 +95,28 @@ class FeedbackTest {
         return Stream.of(
                 Arguments.of(guessWord,
                         Arrays.asList(CORRECT, PRESENT, ABSENT, CORRECT, CORRECT),
-                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, guessWord.charAt(3), guessWord.charAt(4)),
-                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, guessWord.charAt(3), guessWord.charAt(4))),
+                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), ' ', guessWord.charAt(3), guessWord.charAt(4)),
+                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), ' ', guessWord.charAt(3), guessWord.charAt(4))),
 
                 Arguments.of(guessWord,
                         Arrays.asList(PRESENT, CORRECT, CORRECT, CORRECT, ABSENT),
-                        Arrays.asList(Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(4)),
+                        Arrays.asList(' ', ' ', ' ', ' ', guessWord.charAt(4)),
                         Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), guessWord.charAt(3), guessWord.charAt(4)),
 
                         Arguments.of(guessWord,
                                 Arrays.asList(PRESENT, PRESENT, ABSENT, CORRECT, CORRECT),
-                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), Character.MIN_VALUE, Character.MIN_VALUE),
+                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), ' ', ' '),
                                 Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), guessWord.charAt(3), guessWord.charAt(4))),
 
                         Arguments.of(guessWord,
                                 Arrays.asList(CORRECT, CORRECT, ABSENT, CORRECT, PRESENT),
-                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE),
-                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE)),
+                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), ' ', ' ', ' '),
+                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), ' ', guessWord.charAt(3), ' ')),
 
                         Arguments.of(guessWord,
                                 Arrays.asList(ABSENT, PRESENT, ABSENT, PRESENT, ABSENT),
-                                Arrays.asList(Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE),
-                                Arrays.asList(guessWord.charAt(0), Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE))));
+                                Arrays.asList(' ', ' ', ' ', guessWord.charAt(3), ' '),
+                                Arrays.asList(guessWord.charAt(0), ' ', ' ', guessWord.charAt(3), ' '))));
     }
 
     @ParameterizedTest
@@ -139,7 +139,7 @@ class FeedbackTest {
         for (int i = 0; i < hint.size(); i++) {
             char character = hint.get(i);
 
-            if (character != Character.MIN_VALUE) {
+            if (character != ' ') {
                 assertEquals(word.charAt(i), character);
             }
         }
@@ -154,7 +154,7 @@ class FeedbackTest {
 
         for (int i = 1; i < marks.size(); i++) {
             if (marks.get(i) != CORRECT) {
-                assertEquals(Character.MIN_VALUE, hint.get(i));
+                assertEquals(' ', hint.get(i));
             }
         }
     }
@@ -168,7 +168,7 @@ class FeedbackTest {
         List<Character> newHint = feedback.giveHint(lastHint, word);
 
         for (int i = 0; i < lastHint.size(); i++) {
-            if (lastHint.get(i) != Character.MIN_VALUE) {
+            if (lastHint.get(i) != ' ') {
                 assertEquals(lastHint.get(i), newHint.get(i));
             }
         }

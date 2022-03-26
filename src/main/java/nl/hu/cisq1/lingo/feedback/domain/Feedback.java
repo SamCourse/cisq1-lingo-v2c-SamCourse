@@ -119,8 +119,8 @@ public class Feedback {
             char letter = attempt.charAt(i);
             if (marks.get(i) == Mark.CORRECT) {
                 newHint.add(letter);
-            } else if (previousHint.isEmpty() || previousHint.get(i) == Character.MIN_VALUE) {
-                newHint.add(Character.MIN_VALUE);
+            } else if (previousHint.isEmpty() || previousHint.get(i) == ' ') {
+                newHint.add(' ');
             } else {
                 newHint.add(previousHint.get(i));
             }

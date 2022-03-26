@@ -25,6 +25,8 @@ public class Round {
     private int tries;
     @Getter
     private int wordLength;
+    @ElementCollection
+    private List<Character> firstHint;
 
     public Round(String answer) {
         this.answer = answer;
