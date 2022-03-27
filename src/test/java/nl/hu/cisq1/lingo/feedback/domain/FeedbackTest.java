@@ -2,8 +2,6 @@ package nl.hu.cisq1.lingo.feedback.domain;
 
 import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidFeedbackException;
 import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidPreviousHintException;
-import nl.hu.cisq1.lingo.feedback.domain.Feedback;
-import nl.hu.cisq1.lingo.feedback.domain.Mark;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -95,28 +93,28 @@ class FeedbackTest {
         return Stream.of(
                 Arguments.of(guessWord,
                         Arrays.asList(CORRECT, PRESENT, ABSENT, CORRECT, CORRECT),
-                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, guessWord.charAt(3), guessWord.charAt(4)),
-                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, guessWord.charAt(3), guessWord.charAt(4))),
+                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), ' ', guessWord.charAt(3), guessWord.charAt(4)),
+                        Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), ' ', guessWord.charAt(3), guessWord.charAt(4))),
 
                 Arguments.of(guessWord,
                         Arrays.asList(PRESENT, CORRECT, CORRECT, CORRECT, ABSENT),
-                        Arrays.asList(Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(4)),
+                        Arrays.asList(' ', ' ', ' ', ' ', guessWord.charAt(4)),
                         Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), guessWord.charAt(3), guessWord.charAt(4)),
 
                         Arguments.of(guessWord,
                                 Arrays.asList(PRESENT, PRESENT, ABSENT, CORRECT, CORRECT),
-                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), Character.MIN_VALUE, Character.MIN_VALUE),
+                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), ' ', ' '),
                                 Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), guessWord.charAt(2), guessWord.charAt(3), guessWord.charAt(4))),
 
                         Arguments.of(guessWord,
                                 Arrays.asList(CORRECT, CORRECT, ABSENT, CORRECT, PRESENT),
-                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE),
-                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE)),
+                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), ' ', ' ', ' '),
+                                Arrays.asList(guessWord.charAt(0), guessWord.charAt(1), ' ', guessWord.charAt(3), ' ')),
 
                         Arguments.of(guessWord,
                                 Arrays.asList(ABSENT, PRESENT, ABSENT, PRESENT, ABSENT),
-                                Arrays.asList(Character.MIN_VALUE, Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE),
-                                Arrays.asList(guessWord.charAt(0), Character.MIN_VALUE, Character.MIN_VALUE, guessWord.charAt(3), Character.MIN_VALUE))));
+                                Arrays.asList(' ', ' ', ' ', guessWord.charAt(3), ' '),
+                                Arrays.asList(guessWord.charAt(0), ' ', ' ', guessWord.charAt(3), ' '))));
     }
 
     @ParameterizedTest
@@ -124,7 +122,7 @@ class FeedbackTest {
     @DisplayName("hint returned is the same length as the word to guess")
     void hintReturnedMatchesAnswerLength(String word, List<Mark> marks) {
         Feedback feedback = Feedback.create(word, marks);
-        List<Character> hint = feedback.giveHint(new ArrayList<>(), wrongAnswer);
+        List<Character> hint = feedback.calculateHint(wrongAnswer);
 
         assertEquals(word.length(), hint.size());
     }
@@ -134,12 +132,12 @@ class FeedbackTest {
     @DisplayName("hint returned matches word to guess")
     void hintReturnedMatchesAnswer(String word, List<Mark> marks) {
         Feedback feedback = Feedback.create(word, marks);
-        List<Character> hint = feedback.giveHint(new ArrayList<>(), word);
+        List<Character> hint = feedback.calculateHint(word);
 
         for (int i = 0; i < hint.size(); i++) {
             char character = hint.get(i);
 
-            if (character != Character.MIN_VALUE) {
+            if (character != ' ') {
                 assertEquals(word.charAt(i), character);
             }
         }
@@ -150,11 +148,11 @@ class FeedbackTest {
     @DisplayName("hint returned does not hint too much")
     void hintReturnedDoesNotSpoil(String word, List<Mark> marks) {
         Feedback feedback = Feedback.create(word, marks);
-        List<Character> hint = feedback.giveHint(new ArrayList<>(), word);
+        List<Character> hint = feedback.calculateHint(word);
 
         for (int i = 1; i < marks.size(); i++) {
             if (marks.get(i) != CORRECT) {
-                assertEquals(Character.MIN_VALUE, hint.get(i));
+                assertEquals(' ', hint.get(i));
             }
         }
     }
@@ -162,13 +160,13 @@ class FeedbackTest {
 
     @ParameterizedTest
     @MethodSource("provideHintExamples")
-    @DisplayName("hint returned takes previous hint in consideration")
+    @DisplayName("hint returned takes previous hint in consideration") // TODO: Remove unused parameters provided by param stream
     void hintReturnedUsesFallback(String word, List<Mark> marks, List<Character> lastHint, List<Character> expectedHint) {
         Feedback feedback = Feedback.create(word, marks);
-        List<Character> newHint = feedback.giveHint(lastHint, word);
+        List<Character> newHint = feedback.calculateHint(lastHint, word);
 
         for (int i = 0; i < lastHint.size(); i++) {
-            if (lastHint.get(i) != Character.MIN_VALUE) {
+            if (lastHint.get(i) != ' ') {
                 assertEquals(lastHint.get(i), newHint.get(i));
             }
         }
@@ -179,7 +177,7 @@ class FeedbackTest {
     @DisplayName("hint returned matches expected hint")
     void hintReturnedIsCorrect(String word, List<Mark> marks, List<Character> lastHint, List<Character> expectedHint) {
         Feedback feedback = Feedback.create(word, marks);
-        List<Character> hint = feedback.giveHint(lastHint, word);
+        List<Character> hint = feedback.calculateHint(lastHint, word);
 
         assertEquals(expectedHint, hint);
     }
@@ -189,7 +187,7 @@ class FeedbackTest {
     @DisplayName("first hint has first letter revealed")
     void hintReturnedHasFirstLetter(String word, List<Mark> marks) {
         Feedback feedback = Feedback.create(word, marks);
-        List<Character> hint = feedback.giveHint(new ArrayList<>(), word);
+        List<Character> hint = feedback.calculateHint(word);
 
         assertEquals(word.charAt(0), hint.get(0));
     }
@@ -207,7 +205,7 @@ class FeedbackTest {
         }
 
         assertThrows(InvalidPreviousHintException.class,
-                () -> feedback.giveHint(improperLastHint, word));
+                () -> feedback.calculateHint(improperLastHint, word));
     }
 
 
@@ -216,7 +214,7 @@ class FeedbackTest {
     @DisplayName("giveHint returns last hint if word is invalid")
     void giveHintProperlyHandlesInvalid(String word) {
         Feedback feedback = Feedback.create(wrongAnswer, List.of(INVALID, INVALID, INVALID, INVALID, INVALID));
-        assertEquals(new ArrayList<>(), feedback.giveHint(new ArrayList<>(), word));
+        assertEquals(new ArrayList<>(), feedback.calculateHint(word));
     }
 
 

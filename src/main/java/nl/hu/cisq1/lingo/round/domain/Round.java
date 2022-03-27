@@ -1,40 +1,65 @@
 package nl.hu.cisq1.lingo.round.domain;
 
 import lombok.Getter;
-import nl.hu.cisq1.lingo.round.domain.exception.RoundAlreadyOverException;
+import lombok.NoArgsConstructor;
 import nl.hu.cisq1.lingo.feedback.domain.Feedback;
 import nl.hu.cisq1.lingo.guess.domain.Guess;
-import nl.hu.cisq1.lingo.words.domain.Word;
+import nl.hu.cisq1.lingo.round.domain.exception.RoundAlreadyOverException;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@Entity
+@Getter
 public class Round {
-    private final Word answer;
+    @Id
+    @GeneratedValue
+    private UUID id;
+    private String answer;
+    @OneToMany(cascade = CascadeType.ALL)
     private final List<Guess> guesses;
-    @Getter
     private int tries;
-    @Getter
-    private final int wordLength;
+    private int wordLength;
+    @ElementCollection
+    private List<Character> firstHint;
 
-    public Round(Word answer) {
-        this.answer = answer;
+    public Round() {
         this.guesses = new ArrayList<>();
-        this.wordLength = answer.getLength();
+        this.firstHint = new ArrayList<>();
     }
 
-    public void guess(Word attempt) {
+    public Round(String answer) {
+        this();
+        this.answer = answer;
+        this.wordLength = answer.length();
+    }
+
+    public void guess(String attempt) {
+        this.guess(attempt, false);
+    }
+
+    public void guess(String attempt, boolean invalid) {
         if (this.hasEnded()) {
             throw new RoundAlreadyOverException();
         }
 
-        Feedback feedback = Feedback.create(attempt.getValue(), answer.getValue());
+        Feedback feedback;
+
+        if (invalid) {
+            feedback = Feedback.invalid(attempt);
+        } else {
+            feedback = Feedback.create(attempt, answer);
+        }
+
         guesses.add(new Guess(attempt, feedback));
         tries++;
     }
 
     public List<Character> getFirstHint() {
-        return Feedback.initialFeedback(answer.getValue()).giveHint(new ArrayList<>(), answer.getValue());
+        firstHint = Feedback.initialFeedback(answer).calculateHint(answer);
+        return firstHint;
     }
 
     public boolean hasEnded() {

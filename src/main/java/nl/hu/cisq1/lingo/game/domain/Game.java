@@ -4,23 +4,30 @@ import lombok.Getter;
 import nl.hu.cisq1.lingo.round.domain.Round;
 import nl.hu.cisq1.lingo.round.domain.exception.NoRoundFoundException;
 import nl.hu.cisq1.lingo.round.domain.exception.RoundNotEndedException;
-import nl.hu.cisq1.lingo.words.domain.Word;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@Entity
+@Getter
 public class Game {
+    @Id
+    @GeneratedValue
+    private UUID id;
+
+    @OneToMany(cascade = CascadeType.ALL)
     private final List<Round> rounds;
-    @Getter
     private int points;
-    @Getter
     private boolean isOver;
 
     public Game() {
         this.rounds = new ArrayList<>();
+        this.isOver = false;
     }
 
-    public Round initializeRound(Word word) {
+    public Round initializeRound(String word) {
         if (!rounds.isEmpty() && !getLastRound().hasEnded()) {
             throw new RoundNotEndedException("Can not start new round; last round has not ended yet.");
         }
@@ -38,10 +45,10 @@ public class Game {
             throw new RoundNotEndedException("Can not complete this round as it has not ended yet.");
         }
 
-        this.isOver = true;
-
         if (round.hasBeenWon()) {
             this.points += calculatePoints(round.getTries());
+        } else {
+            this.isOver = true;
         }
     }
 

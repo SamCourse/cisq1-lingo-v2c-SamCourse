@@ -1,18 +1,32 @@
 package nl.hu.cisq1.lingo.feedback.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidFeedbackException;
 import nl.hu.cisq1.lingo.feedback.domain.exception.InvalidPreviousHintException;
 
+import javax.persistence.*;
 import java.util.*;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@Entity
+@Getter
 public class Feedback {
-    private final String attempt;
-    @Getter
-    private final List<Mark> marks;
+    @Id
+    @GeneratedValue
+    private UUID id;
+    private String attempt;
+    @Enumerated
+    @ElementCollection(targetClass = Mark.class)
+    private List<Mark> marks;
+    @ElementCollection(targetClass = Character.class)
+    private List<Character> lastHint;
+
+    public Feedback(String attempt, List<Mark> marks) {
+        this.attempt = attempt;
+        this.marks = marks;
+        this.lastHint = new ArrayList<>();
+    }
 
     public static Feedback create(String guess, String answer) {
         return Feedback.create(guess, calculateMarks(guess, answer));
@@ -91,7 +105,11 @@ public class Feedback {
         return marksList;
     }
 
-    public List<Character> giveHint(List<Character> previousHint, String wordToGuess) {
+    public List<Character> calculateHint(String wordToGuess) {
+        return calculateHint(lastHint, wordToGuess);
+    }
+
+    public List<Character> calculateHint(List<Character> previousHint, String wordToGuess) {
         if (!previousHint.isEmpty() && previousHint.size() != wordToGuess.length()) {
             throw new InvalidPreviousHintException();
         }
@@ -108,12 +126,14 @@ public class Feedback {
             char letter = attempt.charAt(i);
             if (marks.get(i) == Mark.CORRECT) {
                 newHint.add(letter);
-            } else if (previousHint.isEmpty() || previousHint.get(i) == Character.MIN_VALUE) {
-                newHint.add(Character.MIN_VALUE);
+            } else if (previousHint.isEmpty() || previousHint.get(i) == ' ') {
+                newHint.add(' ');
             } else {
                 newHint.add(previousHint.get(i));
             }
         }
+
+        this.lastHint = newHint;
 
         return newHint;
     }
