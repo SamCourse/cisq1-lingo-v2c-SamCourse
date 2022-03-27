@@ -74,8 +74,6 @@ class GameServiceTest {
         assertTrue(secondGuess.getFeedback().isGuessValid());
     }
 
-
-
     @Test
     void guessWithTooShortWordIsInvalid() {
         gameService.guess(UUID.randomUUID(), "kaars"); // Complete first round

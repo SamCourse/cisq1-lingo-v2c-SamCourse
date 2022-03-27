@@ -38,6 +38,19 @@ public class GameController {
         return gameDTOs;
     }
 
+    @GetMapping("/progress")
+    public GameResponseDTO getGameProgress(@RequestParam(name = "game") UUID gameId) {
+        Game game;
+
+        try {
+            game = gameService.getGame(gameId);
+        } catch (GameNotFoundException e) {
+            throw new GameNotFoundHTTPException(gameId);
+        }
+
+        return new GameResponseDTO(game);
+    }
+
     @GetMapping("/guess")
     public GameResponseDTO guess(@RequestParam(name = "game") UUID gameId,
                                  @RequestParam(name = "guess") String guess) {

@@ -73,4 +73,9 @@ public class GameService {
         return gameRepository.findAll();
     }
 
+    public Game getGame(UUID gameid) {
+        return gameRepository.findById(gameid)
+                .orElseThrow(() -> new GameNotFoundException(gameid));
+    }
+
 }
