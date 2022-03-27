@@ -91,7 +91,7 @@
 
                 <configuration>
                     <excludes>
-                        <exclude>*DTO.*</exclude>
+                        <exclude>**DTO.*</exclude>
                         <exclude>**/LingoApplication.*</exclude>
                     </excludes>
                 </configuration>
