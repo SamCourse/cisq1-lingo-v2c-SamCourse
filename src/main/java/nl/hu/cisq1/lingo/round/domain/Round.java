@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@NoArgsConstructor
 @Getter
 public class Round {
     @Id
@@ -20,15 +19,20 @@ public class Round {
     private UUID id;
     private String answer;
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Guess> guesses;
+    private final List<Guess> guesses;
     private int tries;
     private int wordLength;
     @ElementCollection
     private List<Character> firstHint;
 
-    public Round(String answer) {
-        this.answer = answer;
+    public Round() {
         this.guesses = new ArrayList<>();
+        this.firstHint = new ArrayList<>();
+    }
+
+    public Round(String answer) {
+        this();
+        this.answer = answer;
         this.wordLength = answer.length();
     }
 
@@ -54,10 +58,7 @@ public class Round {
     }
 
     public List<Character> getFirstHint() {
-        if (firstHint == null || firstHint.isEmpty()) {
-            firstHint = Feedback.initialFeedback(answer).calculateHint(answer);
-        }
-
+        firstHint = Feedback.initialFeedback(answer).calculateHint(answer);
         return firstHint;
     }
 
