@@ -22,9 +22,9 @@ public class RoundResponseDTO {
     @NotNull
     public List<Character> firstHint;
 
-    public RoundResponseDTO(Round round) {
+    public RoundResponseDTO(Round round, String answer) {
         this.id = round.getId();
-        this.answer = round.getAnswer();
+        this.answer = answer;
         this.tries = round.getTries();
         this.wordLength = round.getWordLength();
         this.firstHint = round.getFirstHint();
