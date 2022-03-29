@@ -4,7 +4,10 @@ import com.jayway.jsonpath.JsonPath;
 import nl.hu.cisq1.lingo.game.data.GameRepository;
 import nl.hu.cisq1.lingo.words.data.WordRepository;
 import nl.hu.cisq1.lingo.words.domain.Word;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -53,7 +56,8 @@ class GameControllerIntegrationTest {
         RequestBuilder request = get("/game/start");
 
         mockMvc.perform(request)
-                .andExpect(status().isOk()).andExpect(jsonPath("$.rounds", hasSize(1)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rounds", hasSize(1)));
     }
 
     @Test
@@ -167,7 +171,4 @@ class GameControllerIntegrationTest {
         mockMvc.perform(wrongGameRequestProgress)
                 .andExpect(status().isNotFound());
     }
-
-    // full test: make game, test id, round size = 1, make guess,
-    // guess size = 1, guess word = word, make right guess, round size = 2
 }
