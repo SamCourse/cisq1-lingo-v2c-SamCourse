@@ -5,6 +5,7 @@ import nl.hu.cisq1.lingo.game.application.exception.GameNotFoundException;
 import nl.hu.cisq1.lingo.game.data.GameRepository;
 import nl.hu.cisq1.lingo.game.domain.Game;
 import nl.hu.cisq1.lingo.game.domain.exception.GameAlreadyOverException;
+import nl.hu.cisq1.lingo.guess.domain.Guess;
 import nl.hu.cisq1.lingo.round.domain.Round;
 import nl.hu.cisq1.lingo.words.application.WordService;
 import org.springframework.stereotype.Service;
@@ -29,26 +30,22 @@ public class GameService {
         return game;
     }
 
-    public Game guess(UUID gameId, String word) {
-        Optional<Game> optionalGame = gameRepository.findById(gameId);
-
-        if (optionalGame.isEmpty()) {
-            throw new GameNotFoundException(gameId);
-        }
-
-        Game game = optionalGame.get();
+    public Guess guess(UUID gameId, String word) {
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new GameNotFoundException(gameId));
 
         if (game.isOver()) {
             throw new GameAlreadyOverException();
         }
 
-        int currentRoundWordLength = game.getLastRound().getWordLength();
-
         Round round = game.getLastRound();
+
+        int currentRoundWordLength = round.getWordLength();
 
         if (word.length() > currentRoundWordLength) {
             word = word.substring(0, currentRoundWordLength);
         }
+
         boolean invalid = !wordService.wordExists(word) || word.length() < currentRoundWordLength;
 
         Guess guess = round.guess(word, invalid);
@@ -56,10 +53,10 @@ public class GameService {
         if (round.hasEnded()) {
             game.completeRound();
 
-            return startNewRound(gameId, game.getNextRoundWordLength());
+            startNewRound(gameId, game.getNextRoundWordLength());
         }
 
-        return game;
+        return guess;
     }
 
     public Game startNewRound(UUID gameId, int wordLength) {
