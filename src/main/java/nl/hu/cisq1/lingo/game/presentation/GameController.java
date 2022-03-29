@@ -57,7 +57,8 @@ public class GameController {
         Game game;
 
         try {
-            game = gameService.guess(gameId, guess);
+            gameService.guess(gameId, guess);
+            game = gameService.getGame(gameId);
         } catch (GameNotFoundException e) {
             throw new GameNotFoundHTTPException(gameId);
         } catch (GameAlreadyOverException e) {

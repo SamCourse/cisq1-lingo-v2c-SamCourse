@@ -1,5 +1,6 @@
 package nl.hu.cisq1.lingo.round.domain;
 
+import nl.hu.cisq1.lingo.guess.domain.exception.NoGuessFoundException;
 import nl.hu.cisq1.lingo.round.domain.exception.RoundAlreadyOverException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,10 +18,9 @@ class RoundTest {
         Round round = new Round(wordToGuess);
         assertFalse(round.hasEnded());
 
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
+        for (int i = 0; i < 4; i++ ) {
+            round.guess(wrongWord);
+        }
 
         assertFalse(round.hasEnded());
     }
@@ -31,10 +31,10 @@ class RoundTest {
         Round round = new Round(wordToGuess);
         assertFalse(round.hasEnded());
 
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
+        for (int i = 0; i < 4; i++ ) {
+            round.guess(wrongWord);
+        }
+
         assertFalse(round.hasEnded());
         round.guess(wrongWord);
 
@@ -69,10 +69,10 @@ class RoundTest {
         Round round = new Round(wordToGuess);
         assertFalse(round.hasBeenLost());
 
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
+        for (int i = 0; i < 4; i++ ) {
+            round.guess(wrongWord);
+        }
+
         assertFalse(round.hasBeenLost());
 
         round.guess(wrongWord);
@@ -86,10 +86,10 @@ class RoundTest {
         Round round = new Round(wordToGuess);
         assertFalse(round.hasBeenLost());
 
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
+        for (int i = 0; i < 4; i++ ) {
+            round.guess(wrongWord);
+        }
+
         assertFalse(round.hasBeenLost());
 
         round.guess(wordToGuess);
@@ -105,15 +105,22 @@ class RoundTest {
         assertDoesNotThrow(() ->
                 round.guess(wrongWord));
 
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
+        for (int i = 0; i < 3; i++ ) {
+            round.guess(wrongWord);
+        }
 
         assertDoesNotThrow(() ->
                 round.guess(wrongWord));
 
         assertThrows(RoundAlreadyOverException.class,
                 () -> round.guess(wrongWord));
+    }
+
+    @Test
+    @DisplayName("round has no last guess if no guess has been made yet")
+    void noLastGuessIfNewRound() {
+        Round round = new Round(wordToGuess);
+        assertThrows(NoGuessFoundException.class, round::getLastGuess);
     }
 
 }

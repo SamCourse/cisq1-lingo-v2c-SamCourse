@@ -4,7 +4,10 @@ import com.jayway.jsonpath.JsonPath;
 import nl.hu.cisq1.lingo.game.data.GameRepository;
 import nl.hu.cisq1.lingo.words.data.WordRepository;
 import nl.hu.cisq1.lingo.words.domain.Word;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,7 +37,7 @@ class GameControllerIntegrationTest {
 
     @BeforeEach
     void loadTestWords() {
-        // Fill database with test samples
+        // Fill database with test fixtures
         wordRepository.save(new Word(WORD_5));
         wordRepository.save(new Word(WORD_6));
         wordRepository.save(new Word(WORD_7));
@@ -42,7 +45,7 @@ class GameControllerIntegrationTest {
 
     @AfterEach
     void clearData() {
-        // Clear database of test samples for both Word and Game table
+        // Clear database of test fixtures for both Word and Game table
         wordRepository.deleteAll();
         gameRepository.deleteAll();
     }
@@ -53,7 +56,8 @@ class GameControllerIntegrationTest {
         RequestBuilder request = get("/game/start");
 
         mockMvc.perform(request)
-                .andExpect(status().isOk()).andExpect(jsonPath("$.rounds", hasSize(1)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rounds", hasSize(1)));
     }
 
     @Test
@@ -115,11 +119,9 @@ class GameControllerIntegrationTest {
 
 
         // Make 5 wrong requests to force end of game
-        mockMvc.perform(guessRequest).andExpect(status().isOk());
-        mockMvc.perform(guessRequest).andExpect(status().isOk());
-        mockMvc.perform(guessRequest).andExpect(status().isOk());
-        mockMvc.perform(guessRequest).andExpect(status().isOk());
-        mockMvc.perform(guessRequest).andExpect(status().isOk());
+        for (int i = 0; i < 5; i++) {
+            mockMvc.perform(guessRequest).andExpect(status().isOk());
+        }
 
         // Ensure exception is thrown for attempting to guess on ended game
         mockMvc.perform(correctGuessRequest).andExpect(status().isForbidden());
@@ -167,7 +169,4 @@ class GameControllerIntegrationTest {
         mockMvc.perform(wrongGameRequestProgress)
                 .andExpect(status().isNotFound());
     }
-
-    // full test: make game, test id, round size = 1, make guess,
-    // guess size = 1, guess word = word, make right guess, round size = 2
 }

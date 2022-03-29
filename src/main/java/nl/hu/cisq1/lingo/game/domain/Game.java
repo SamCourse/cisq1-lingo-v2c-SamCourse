@@ -17,7 +17,7 @@ public class Game {
     @GeneratedValue
     private UUID id;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private final List<Round> rounds;
     private int points;
     private boolean isOver;

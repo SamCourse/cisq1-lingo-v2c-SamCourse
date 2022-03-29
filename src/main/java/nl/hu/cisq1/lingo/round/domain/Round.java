@@ -1,9 +1,9 @@
 package nl.hu.cisq1.lingo.round.domain;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import nl.hu.cisq1.lingo.feedback.domain.Feedback;
 import nl.hu.cisq1.lingo.guess.domain.Guess;
+import nl.hu.cisq1.lingo.guess.domain.exception.NoGuessFoundException;
 import nl.hu.cisq1.lingo.round.domain.exception.RoundAlreadyOverException;
 
 import javax.persistence.*;
@@ -36,11 +36,11 @@ public class Round {
         this.wordLength = answer.length();
     }
 
-    public void guess(String attempt) {
-        this.guess(attempt, false);
+    public Guess guess(String attempt) {
+        return this.guess(attempt, false);
     }
 
-    public void guess(String attempt, boolean invalid) {
+    public Guess guess(String attempt, boolean invalid) {
         if (this.hasEnded()) {
             throw new RoundAlreadyOverException();
         }
@@ -53,8 +53,11 @@ public class Round {
             feedback = Feedback.create(attempt, answer);
         }
 
-        guesses.add(new Guess(attempt, feedback));
+        Guess guess = new Guess(attempt, feedback);
+        guesses.add(guess);
         tries++;
+
+        return guess;
     }
 
     public List<Character> getFirstHint() {
@@ -71,7 +74,7 @@ public class Round {
             return false;
         }
 
-        Guess lastGuess = guesses.get(guesses.size() - 1);
+        Guess lastGuess = getLastGuess();
 
         return lastGuess.getFeedback().isWordGuessed();
     }
@@ -82,5 +85,13 @@ public class Round {
         }
 
         return !hasBeenWon() && tries == 5;
+    }
+
+    public Guess getLastGuess() {
+        if (guesses.size() == 0) {
+            throw new NoGuessFoundException();
+        }
+
+        return guesses.get(guesses.size() - 1);
     }
 }
