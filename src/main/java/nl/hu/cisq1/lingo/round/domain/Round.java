@@ -1,9 +1,9 @@
 package nl.hu.cisq1.lingo.round.domain;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import nl.hu.cisq1.lingo.feedback.domain.Feedback;
 import nl.hu.cisq1.lingo.guess.domain.Guess;
+import nl.hu.cisq1.lingo.guess.domain.exception.NoGuessFoundException;
 import nl.hu.cisq1.lingo.round.domain.exception.RoundAlreadyOverException;
 
 import javax.persistence.*;
@@ -74,7 +74,7 @@ public class Round {
             return false;
         }
 
-        Guess lastGuess = guesses.get(guesses.size() - 1);
+        Guess lastGuess = getLastGuess();
 
         return lastGuess.getFeedback().isWordGuessed();
     }
@@ -85,5 +85,13 @@ public class Round {
         }
 
         return !hasBeenWon() && tries == 5;
+    }
+
+    public Guess getLastGuess() {
+        if (guesses.size() == 0) {
+            throw new NoGuessFoundException();
+        }
+
+        return guesses.get(guesses.size() - 1);
     }
 }

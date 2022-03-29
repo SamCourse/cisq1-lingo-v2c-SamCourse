@@ -1,5 +1,6 @@
 package nl.hu.cisq1.lingo.round.domain;
 
+import nl.hu.cisq1.lingo.guess.domain.exception.NoGuessFoundException;
 import nl.hu.cisq1.lingo.round.domain.exception.RoundAlreadyOverException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -114,6 +115,13 @@ class RoundTest {
 
         assertThrows(RoundAlreadyOverException.class,
                 () -> round.guess(wrongWord));
+    }
+
+    @Test
+    @DisplayName("round has no last guess if no guess has been made yet")
+    void noLastGuessIfNewRound() {
+        Round round = new Round(wordToGuess);
+        assertThrows(NoGuessFoundException.class, round::getLastGuess);
     }
 
 }
