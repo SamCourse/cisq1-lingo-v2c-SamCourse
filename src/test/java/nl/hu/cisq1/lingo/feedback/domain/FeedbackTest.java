@@ -160,8 +160,8 @@ class FeedbackTest {
 
     @ParameterizedTest
     @MethodSource("provideHintExamples")
-    @DisplayName("hint returned takes previous hint in consideration") // TODO: Remove unused parameters provided by param stream
-    void hintReturnedUsesFallback(String word, List<Mark> marks, List<Character> lastHint, List<Character> expectedHint) {
+    @DisplayName("hint returned takes previous hint in consideration")
+    void hintReturnedUsesFallback(String word, List<Mark> marks, List<Character> lastHint) {
         Feedback feedback = Feedback.create(word, marks);
         List<Character> newHint = feedback.calculateHint(lastHint, word);
 

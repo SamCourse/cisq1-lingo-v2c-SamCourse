@@ -25,6 +25,6 @@ public class GameResponseDTO {
         this.isOver = game.isOver();
         rounds = new ArrayList<>();
 
-        game.getRounds().forEach(round -> rounds.add(new RoundResponseDTO(round)));
+        game.getRounds().forEach(round -> rounds.add(new RoundResponseDTO(round, round.hasEnded() ? round.getAnswer(): "")));
     }
 }

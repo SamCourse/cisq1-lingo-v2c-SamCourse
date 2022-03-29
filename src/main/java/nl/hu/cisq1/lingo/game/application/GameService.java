@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -53,7 +52,9 @@ public class GameService {
         if (round.hasEnded()) {
             game.completeRound();
 
-            startNewRound(gameId, game.getNextRoundWordLength());
+            if (round.hasBeenWon()) {
+                startNewRound(gameId, game.getNextRoundWordLength());
+            }
         }
 
         return guess;

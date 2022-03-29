@@ -53,6 +53,8 @@ public class Round {
             feedback = Feedback.create(attempt, answer);
         }
 
+        feedback.calculateHint(answer);
+
         Guess guess = new Guess(attempt, feedback);
         guesses.add(guess);
         tries++;

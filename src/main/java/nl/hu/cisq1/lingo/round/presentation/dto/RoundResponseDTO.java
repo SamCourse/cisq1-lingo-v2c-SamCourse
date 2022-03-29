@@ -1,5 +1,6 @@
 package nl.hu.cisq1.lingo.round.presentation.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import nl.hu.cisq1.lingo.guess.presentation.dto.GuessResponseDTO;
 import nl.hu.cisq1.lingo.round.domain.Round;
 
@@ -11,7 +12,7 @@ import java.util.UUID;
 public class RoundResponseDTO {
     @NotNull
     public UUID id;
-    @NotNull
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public String answer;
     @NotNull
     public List<GuessResponseDTO> guesses;
@@ -22,9 +23,12 @@ public class RoundResponseDTO {
     @NotNull
     public List<Character> firstHint;
 
-    public RoundResponseDTO(Round round) {
+    public RoundResponseDTO(Round round, String answer) {
         this.id = round.getId();
-        this.answer = round.getAnswer();
+        if (!answer.isEmpty()) {
+            this.answer = answer;
+        }
+
         this.tries = round.getTries();
         this.wordLength = round.getWordLength();
         this.firstHint = round.getFirstHint();
