@@ -51,7 +51,7 @@ public class GameService {
         }
         boolean invalid = !wordService.wordExists(word) || word.length() < currentRoundWordLength;
 
-        round.guess(word, invalid);
+        Guess guess = round.guess(word, invalid);
 
         if (round.hasEnded()) {
             game.completeRound();

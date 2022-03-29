@@ -56,32 +56,33 @@ class GameServiceTest {
 
     @Test
     void guessWithInvalidWordIsInvalid() {
-        gameService.guess(UUID.randomUUID(), "kaary");
-        Round round = game.getLastRound();
-        Guess guess = round.getGuesses().get(0);
-        assertFalse(guess.getFeedback().isGuessValid());
+        Guess guess = gameService.guess(UUID.randomUUID(), "kaary");
+        Feedback feedback = guess.getFeedback();
+
+        assertFalse(feedback.isGuessValid());
     }
 
     @Test
     void guessWithTooLongWordIsInvalidUnlessExists() {
-        gameService.guess(UUID.randomUUID(), "too_long_word");
-        Round round = game.getLastRound();
-        Guess guess = round.getGuesses().get(0);
-        assertFalse(guess.getFeedback().isGuessValid());
+        Guess guess = gameService.guess(UUID.randomUUID(), "too_long_word");
+        Feedback feedback = guess.getFeedback();
 
-        gameService.guess(UUID.randomUUID(), "kaarsje");
-        Guess secondGuess = round.getGuesses().get(1);
-        assertTrue(secondGuess.getFeedback().isGuessValid());
+        assertFalse(feedback.isGuessValid());
+
+        Guess secondGuess = gameService.guess(UUID.randomUUID(), "kaarsje");
+        Feedback secondFeedback = secondGuess.getFeedback();
+
+        assertTrue(secondFeedback.isGuessValid());
     }
 
     @Test
     void guessWithTooShortWordIsInvalid() {
         gameService.guess(UUID.randomUUID(), "kaars"); // Complete first round
-        gameService.guess(UUID.randomUUID(), "kaars"); // Guess too short word on 6-letter word round
+        Guess guess = gameService.guess(UUID.randomUUID(), "kaars"); // Guess too short word on 6-letter word round
 
-        Round round = game.getLastRound();
-        Guess guess = round.getGuesses().get(0);
-        assertFalse(guess.getFeedback().isGuessValid());
+        Feedback feedback = guess.getFeedback();
+
+        assertFalse(feedback.isGuessValid());
     }
 
     @Test

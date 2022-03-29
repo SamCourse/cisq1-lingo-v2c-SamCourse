@@ -36,11 +36,11 @@ public class Round {
         this.wordLength = answer.length();
     }
 
-    public void guess(String attempt) {
-        this.guess(attempt, false);
+    public Guess guess(String attempt) {
+        return this.guess(attempt, false);
     }
 
-    public void guess(String attempt, boolean invalid) {
+    public Guess guess(String attempt, boolean invalid) {
         if (this.hasEnded()) {
             throw new RoundAlreadyOverException();
         }
@@ -53,8 +53,11 @@ public class Round {
             feedback = Feedback.create(attempt, answer);
         }
 
-        guesses.add(new Guess(attempt, feedback));
+        Guess guess = new Guess(attempt, feedback);
+        guesses.add(guess);
         tries++;
+
+        return guess;
     }
 
     public List<Character> getFirstHint() {
