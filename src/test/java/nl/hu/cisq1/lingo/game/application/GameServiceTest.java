@@ -102,7 +102,7 @@ class GameServiceTest {
     }
 
     @Test
-    @DisplayName("Making a guess on a game that has ended throws an exception")
+    @DisplayName("making a guess on a game that has ended throws an exception")
     void guessOnEndedGameThrowsException() {
         for (int i = 0; i < 5; i++) {
             gameService.guess(UUID.randomUUID(), "kaart");
