@@ -59,11 +59,10 @@ public class GameService {
         return guess;
     }
 
-    public Game startNewRound(UUID gameId, int wordLength) {
+    public Round startNewRound(UUID gameId, int wordLength) {
         Game game = gameRepository.getById(gameId);
         String word = wordService.provideRandomWord(wordLength);
-        game.initializeRound(word);
-        return game;
+        return game.initializeRound(word);
     }
 
     public List<Game> getAllGames() {
