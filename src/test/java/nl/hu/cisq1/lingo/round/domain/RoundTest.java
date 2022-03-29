@@ -18,10 +18,9 @@ class RoundTest {
         Round round = new Round(wordToGuess);
         assertFalse(round.hasEnded());
 
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
+        for (int i = 0; i < 4; i++ ) {
+            round.guess(wrongWord);
+        }
 
         assertFalse(round.hasEnded());
     }
@@ -32,10 +31,10 @@ class RoundTest {
         Round round = new Round(wordToGuess);
         assertFalse(round.hasEnded());
 
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
+        for (int i = 0; i < 4; i++ ) {
+            round.guess(wrongWord);
+        }
+
         assertFalse(round.hasEnded());
         round.guess(wrongWord);
 
@@ -70,10 +69,10 @@ class RoundTest {
         Round round = new Round(wordToGuess);
         assertFalse(round.hasBeenLost());
 
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
+        for (int i = 0; i < 4; i++ ) {
+            round.guess(wrongWord);
+        }
+
         assertFalse(round.hasBeenLost());
 
         round.guess(wrongWord);
@@ -87,10 +86,10 @@ class RoundTest {
         Round round = new Round(wordToGuess);
         assertFalse(round.hasBeenLost());
 
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
+        for (int i = 0; i < 4; i++ ) {
+            round.guess(wrongWord);
+        }
+
         assertFalse(round.hasBeenLost());
 
         round.guess(wordToGuess);
@@ -106,9 +105,9 @@ class RoundTest {
         assertDoesNotThrow(() ->
                 round.guess(wrongWord));
 
-        round.guess(wrongWord);
-        round.guess(wrongWord);
-        round.guess(wrongWord);
+        for (int i = 0; i < 3; i++ ) {
+            round.guess(wrongWord);
+        }
 
         assertDoesNotThrow(() ->
                 round.guess(wrongWord));

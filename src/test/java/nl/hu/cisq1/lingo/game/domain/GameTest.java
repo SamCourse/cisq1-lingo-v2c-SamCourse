@@ -77,11 +77,9 @@ class GameTest {
         assertFalse(game.isOver());
         Round round = game.initializeRound(answer);
 
-        round.guess(wrongAnswer);
-        round.guess(wrongAnswer);
-        round.guess(wrongAnswer);
-        round.guess(wrongAnswer);
-        round.guess(wrongAnswer);
+        for (int i = 0; i < 5; i++ ) {
+            round.guess(wrongAnswer);
+        }
 
         game.completeRound();
         assertTrue(game.isOver());
@@ -138,11 +136,9 @@ class GameTest {
         Round round = game.initializeRound(answer);
         int points = game.getPoints();
 
-        round.guess(wrongAnswer);
-        round.guess(wrongAnswer);
-        round.guess(wrongAnswer);
-        round.guess(wrongAnswer);
-        round.guess(wrongAnswer);
+        for (int i = 0; i < 5; i++) {
+            round.guess(wrongAnswer);
+        }
 
         game.completeRound();
         assertEquals(points, game.getPoints());

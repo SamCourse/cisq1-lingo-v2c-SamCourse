@@ -119,11 +119,9 @@ class GameControllerIntegrationTest {
 
 
         // Make 5 wrong requests to force end of game
-        mockMvc.perform(guessRequest).andExpect(status().isOk());
-        mockMvc.perform(guessRequest).andExpect(status().isOk());
-        mockMvc.perform(guessRequest).andExpect(status().isOk());
-        mockMvc.perform(guessRequest).andExpect(status().isOk());
-        mockMvc.perform(guessRequest).andExpect(status().isOk());
+        for (int i = 0; i < 5; i++) {
+            mockMvc.perform(guessRequest).andExpect(status().isOk());
+        }
 
         // Ensure exception is thrown for attempting to guess on ended game
         mockMvc.perform(correctGuessRequest).andExpect(status().isForbidden());

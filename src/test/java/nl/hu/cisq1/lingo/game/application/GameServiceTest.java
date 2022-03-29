@@ -95,11 +95,9 @@ class GameServiceTest {
 
     @Test
     void guessOnEndedGameThrowsException() {
-        gameService.guess(UUID.randomUUID(), "kaart");
-        gameService.guess(UUID.randomUUID(), "kaart");
-        gameService.guess(UUID.randomUUID(), "kaart");
-        gameService.guess(UUID.randomUUID(), "kaart");
-        gameService.guess(UUID.randomUUID(), "kaart");
+        for (int i = 0; i < 5; i++) {
+            gameService.guess(UUID.randomUUID(), "kaart");
+        }
 
         assertThrows(GameAlreadyOverException.class, () -> gameService.guess(UUID.randomUUID(), "kaars"));
     }
