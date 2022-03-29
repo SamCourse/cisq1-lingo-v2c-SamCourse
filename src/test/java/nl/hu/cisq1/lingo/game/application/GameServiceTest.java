@@ -1,5 +1,6 @@
 package nl.hu.cisq1.lingo.game.application;
 
+import nl.hu.cisq1.lingo.feedback.domain.Feedback;
 import nl.hu.cisq1.lingo.game.application.exception.GameNotFoundException;
 import nl.hu.cisq1.lingo.game.data.GameRepository;
 import nl.hu.cisq1.lingo.game.domain.Game;
@@ -8,6 +9,7 @@ import nl.hu.cisq1.lingo.guess.domain.Guess;
 import nl.hu.cisq1.lingo.round.domain.Round;
 import nl.hu.cisq1.lingo.words.application.WordService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -44,17 +46,20 @@ class GameServiceTest {
     }
 
     @Test
+    @DisplayName("ensure new games start with one round")
     void newGameHasOneRound() {
         assertEquals(1, game.getRounds().size());
     }
 
     @Test
+    @DisplayName("ensure new games start with 5-letter word rounds")
     void newGameStartsNewRoundWith5LetterWord() {
         Round round = game.getLastRound();
         assertEquals(5, round.getWordLength());
     }
 
     @Test
+    @DisplayName("performing guess with non-existent word is invalid guess")
     void guessWithInvalidWordIsInvalid() {
         Guess guess = gameService.guess(UUID.randomUUID(), "kaary");
         Feedback feedback = guess.getFeedback();
@@ -63,6 +68,7 @@ class GameServiceTest {
     }
 
     @Test
+    @DisplayName("guessing a word that is too long will be invalid unless the cropped word exists")
     void guessWithTooLongWordIsInvalidUnlessExists() {
         Guess guess = gameService.guess(UUID.randomUUID(), "too_long_word");
         Feedback feedback = guess.getFeedback();
@@ -76,6 +82,7 @@ class GameServiceTest {
     }
 
     @Test
+    @DisplayName("guess is invalid if word is too short")
     void guessWithTooShortWordIsInvalid() {
         gameService.guess(UUID.randomUUID(), "kaars"); // Complete first round
         Guess guess = gameService.guess(UUID.randomUUID(), "kaars"); // Guess too short word on 6-letter word round
@@ -86,6 +93,7 @@ class GameServiceTest {
     }
 
     @Test
+    @DisplayName("making a correct guess starts a new round, with correct length")
     void correctGuessStartsNewRound() {
         gameService.guess(UUID.randomUUID(), "kaars");
 
@@ -94,6 +102,7 @@ class GameServiceTest {
     }
 
     @Test
+    @DisplayName("Making a guess on a game that has ended throws an exception")
     void guessOnEndedGameThrowsException() {
         for (int i = 0; i < 5; i++) {
             gameService.guess(UUID.randomUUID(), "kaart");
@@ -103,6 +112,7 @@ class GameServiceTest {
     }
 
     @Test
+    @DisplayName("performing guess on non existent game throws exception")
     void guessOnNonExistentGameThrowsGameNotFound() {
         UUID fakeId = UUID.randomUUID();
 
