@@ -53,8 +53,13 @@ public class Feedback {
     }
 
     public static Feedback initialFeedback(String answer) {
-        return Feedback.create(answer.charAt(0) + "    ",
-                List.of(Mark.CORRECT, Mark.ABSENT, Mark.ABSENT, Mark.ABSENT, Mark.ABSENT));
+        List<Mark> markList = new ArrayList<>(List.of(Mark.CORRECT));
+        for (int i = 1; i < answer.length(); i++) {
+            markList.add(Mark.ABSENT);
+        }
+
+        return Feedback.create(answer.charAt(0) + " ".repeat(answer.length() - 1),
+                markList);
     }
 
     private static List<Mark> calculateMarks(String guess, String answer) {
