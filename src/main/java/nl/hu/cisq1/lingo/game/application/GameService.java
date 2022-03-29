@@ -53,7 +53,9 @@ public class GameService {
         if (round.hasEnded()) {
             game.completeRound();
 
-            startNewRound(gameId, game.getNextRoundWordLength());
+            if (round.hasBeenWon()) {
+                startNewRound(gameId, game.getNextRoundWordLength());
+            }
         }
 
         return guess;
