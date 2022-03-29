@@ -22,10 +22,10 @@ Institute for ICT of the [Hogeschool Utrecht](https://www.hu.nl/).
 - Docker
 ###
 ### Design
-####Class diagram conceptual
+#### Class diagram conceptual
 ![Class Diagram Conceptual](documentation/diagrams/class_diagram/LingoTrainer_ClassDiagram.jpg)
 
-####Class diagram implementation
+#### Class diagram implementation  
 ![Class Diagram Impl](documentation/diagrams/class_diagram/LingoTrainer_ClassDiagram_Implementation.jpg)
 ###
 ### Introduction
@@ -38,19 +38,19 @@ Data is persisted using a PostgreSQL database utilising Spring Data JPA. The ent
 2. Run `docker-compose up` to start the PostgreSQL service in a Docker container.  
 3. Verify the project's integrity with Maven, by running `mvnw verify`.  
 
-The project is now ready.
+The project is now ready!
 
-###Tests
-####Intellij Test Coverage
+### Tests
+#### Intellij Test Coverage  
 ![IntelliJ Test Coverage](documentation/images/Intellij_Test_Coverage.png)
-####Jacoco Test Coverage
+#### Jacoco Test Coverage  
 ![Jacoco Test Coverage](documentation/images/Jacoco_Test_Coverage.png)
-####Pit Test Coverage
+#### Pit Test Coverage  
 ![Pit Test Coverage](documentation/images/Pit_Test_Coverage.png)
 
 ### Examples
-####Start game example
+#### Start game example  
 ![Start Game Response Example](documentation/images/StartGame_Response_Example.png)
 
-####Make guess example
-![Guess Response Example](documentation/images/Guess Response Example.png)
+#### Make guess example  
+![Guess Response Example](documentation/images/Guess_Response_Example.png)
