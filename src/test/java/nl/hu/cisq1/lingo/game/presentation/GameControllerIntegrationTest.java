@@ -37,7 +37,7 @@ class GameControllerIntegrationTest {
 
     @BeforeEach
     void loadTestWords() {
-        // Fill database with test samples
+        // Fill database with test fixtures
         wordRepository.save(new Word(WORD_5));
         wordRepository.save(new Word(WORD_6));
         wordRepository.save(new Word(WORD_7));
@@ -45,7 +45,7 @@ class GameControllerIntegrationTest {
 
     @AfterEach
     void clearData() {
-        // Clear database of test samples for both Word and Game table
+        // Clear database of test fixtures for both Word and Game table
         wordRepository.deleteAll();
         gameRepository.deleteAll();
     }
