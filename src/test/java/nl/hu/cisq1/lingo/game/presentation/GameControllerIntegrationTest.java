@@ -134,7 +134,7 @@ class GameControllerIntegrationTest {
 
     @Test
     @DisplayName("progress check returns progress for right game with correct information")
-    void progressGameTest() throws Exception { // ID, rounds size = 1, make guess,
+    void progressGameTest() throws Exception {
         RequestBuilder request = get("/game/start");
 
         MvcResult result = mockMvc.perform(request).andReturn();
