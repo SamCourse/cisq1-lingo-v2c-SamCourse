@@ -7,11 +7,8 @@ import nl.hu.cisq1.lingo.round.domain.Round;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class RoundResponseDTO {
-    @NotNull
-    public UUID id;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public String answer;
     @NotNull
@@ -24,7 +21,6 @@ public class RoundResponseDTO {
     public List<Character> firstHint;
 
     public RoundResponseDTO(Round round, String answer) {
-        this.id = round.getId();
         if (!answer.isEmpty()) {
             this.answer = answer;
         }
