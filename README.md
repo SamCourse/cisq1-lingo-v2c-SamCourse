@@ -42,15 +42,15 @@ The project is now ready!
 
 ### Tests
 #### Intellij Test Coverage  
-![IntelliJ Test Coverage](documentation/images/Intellij_Test_Coverage.png)
+![IntelliJ Test Coverage](documentation/images/tests/Intellij_Test_Coverage.png)
 #### Jacoco Test Coverage  
-![Jacoco Test Coverage](documentation/images/Jacoco_Test_Coverage.png)
+![Jacoco Test Coverage](documentation/images/tests/Jacoco_Test_Coverage.png)
 #### Pit Test Coverage  
-![Pit Test Coverage](documentation/images/Pit_Test_Coverage.png)
+![Pit Test Coverage](documentation/images/tests/Pit_Test_Coverage.png)
 
 ### Examples
 #### Start game example  
-![Start Game Response Example](documentation/images/StartGame_Response_Example.png)
+![Start Game Response Example](documentation/images/response_examples/StartGame_Response_Example.png)
 
 #### Make guess example  
-![Guess Response Example](documentation/images/Guess_Response_Example.png)
+![Guess Response Example](documentation/images/response_examples/Guess_Response_Example.png)
